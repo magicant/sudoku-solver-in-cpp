@@ -260,6 +260,8 @@ extern std::ostream &operator<<(
         std::ostream &os,
         const Board<PossibilitySet> &board);
 
+extern std::istream &operator>>(std::istream &is, Board<Number> &board);
+
 
 #endif // #ifndef INCLUDED_BOARD_HH
 

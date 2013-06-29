@@ -1,9 +1,13 @@
 #include <cstdlib>
+#include <ios>
+#include <limits>
 #include <stdexcept>
 #include "Board.hh"
 
 using std::abort;
 using std::logic_error;
+using std::numeric_limits;
+using std::streamsize;
 
 
 Number PossibilitySet::uniqueValue() const {
@@ -65,6 +69,18 @@ std::ostream &operator<<(
         return os << separator(pos);
     });
     return os;
+}
+
+std::istream &operator>>(std::istream &is, Board<Number> &board) {
+    for (Position pi; pi.isValid(); pi.down()) {
+        for (Position pj = pi; pj.isValid(); pj.right()) {
+            unsigned n;
+            is >> n;
+            board[pj] = static_cast<Number>(n) - 1;
+        }
+        is.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    return is;
 }
 
 

@@ -6,6 +6,7 @@
 #include "Tester.inl"
 
 using std::size_t;
+using std::istringstream;
 using std::ostringstream;
 using std::string;
 
@@ -147,6 +148,14 @@ static void testString(const Board<T> &board, const string expected) {
     test_assert(os.str() == expected);
 }
 
+static void testParseAndOutput(const string input, const string output) {
+    istringstream is(input);
+    Board<Number> board;
+    is >> board;
+    test_assert(is.good());
+    testString(board, output);
+}
+
 static void testBoard2() {
     Board<Number> b1;
     wholeArea.forAllPositions([&](Position pos) {
@@ -237,6 +246,48 @@ static void testBoard2() {
                 );
 }
 
+static void testBoard3() {
+    testParseAndOutput(
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n",
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n");
+    testParseAndOutput(
+            "0  0 1 0  0  0 0 0  0 dummy\n"
+            "0 0  0  0 0 0  0  7 0\n"
+            "0  0 0 0  0  2 0 0  0\n"
+            "0 0  0  0 0 0  0  0 0\n"
+            "0  6 0 0  0  0 0 0  8\n"
+            "0 0  0  3 0 0  0  0 0\n"
+            "0  0 0 0  0  0 9 0  0\n"
+            "0 0  0  0 0 4  0  0 0\n"
+            "5  0 0 0  0  0 0 0  0 dummy\n"
+            "dummy\n",
+            "0 0 1 0 0 0 0 0 0\n"
+            "0 0 0 0 0 0 0 7 0\n"
+            "0 0 0 0 0 2 0 0 0\n"
+            "0 0 0 0 0 0 0 0 0\n"
+            "0 6 0 0 0 0 0 0 8\n"
+            "0 0 0 3 0 0 0 0 0\n"
+            "0 0 0 0 0 0 9 0 0\n"
+            "0 0 0 0 0 4 0 0 0\n"
+            "5 0 0 0 0 0 0 0 0\n");
+}
+
 static void testAll() {
     testPossibilitySet1();
     testPossibilitySet2();
@@ -244,6 +295,7 @@ static void testAll() {
     testArea1();
     testBoard1();
     testBoard2();
+    testBoard3();
 }
 
 int main() {

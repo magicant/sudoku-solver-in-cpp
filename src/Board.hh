@@ -6,6 +6,7 @@
 #include <bitset>
 #include <cstddef>
 #include <functional>
+#include <iostream>
 #include <utility>
 
 
@@ -251,6 +252,13 @@ bool operator!=(const Board<T> &b1, const Board<T> &b2)
         noexcept(noexcept(b1[Position()] == b2[Position()])) {
     return !(b1 == b2);
 }
+
+extern std::ostream &operator<<(
+        std::ostream &os,
+        const Board<Number> &board);
+extern std::ostream &operator<<(
+        std::ostream &os,
+        const Board<PossibilitySet> &board);
 
 
 #endif // #ifndef INCLUDED_BOARD_HH

@@ -1,8 +1,13 @@
 #include <cstddef>
+#include <iostream>
+#include <sstream>
+#include <string>
 #include "Board.hh"
 #include "Tester.inl"
 
 using std::size_t;
+using std::ostringstream;
+using std::string;
 
 
 static void testPossibilitySet1() {
@@ -135,12 +140,110 @@ static void testBoard1() {
     test_assert(b1 != b2);
 }
 
+template <typename T>
+static void testString(const Board<T> &board, const string expected) {
+    ostringstream os;
+    os << board;
+    test_assert(os.str() == expected);
+}
+
+static void testBoard2() {
+    Board<Number> b1;
+    wholeArea.forAllPositions([&](Position pos) {
+        b1[pos] = 0;
+        return true;
+    });
+    testString(b1,
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                );
+
+    b1[Position(2, 4)] = 1;
+    b1[Position(7, 3)] = 5;
+    testString(b1,
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 1 2 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 1 1 6 1 1 1 1 1\n"
+                "1 1 1 1 1 1 1 1 1\n"
+                );
+
+    wholeArea.forAllPositions([&](Position pos) {
+        b1[pos] = pos.i() * pos.j();
+        return true;
+    });
+    testString(b1,
+                "1 1 1 1 1 1 1 1 1\n"
+                "1 2 3 4 5 6 7 8 9\n"
+                "1 3 5 7 9 0 0 0 0\n"
+                "1 4 7 0 0 0 0 0 0\n"
+                "1 5 9 0 0 0 0 0 0\n"
+                "1 6 0 0 0 0 0 0 0\n"
+                "1 7 0 0 0 0 0 0 0\n"
+                "1 8 0 0 0 0 0 0 0\n"
+                "1 9 0 0 0 0 0 0 0\n"
+                );
+
+    Board<PossibilitySet> b2;
+    testString(b2,
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                );
+
+    b2[Position(3, 3)].add(8);
+    b2[Position(5, 4)].add(0);
+    testString(b2,
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x 9 x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x 1 x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                );
+
+    b2[Position(3, 3)].add(0);
+    b2[Position(5, 4)].remove(0);
+    testString(b2,
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x ? x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                "x x x x x x x x x\n"
+                );
+}
+
 static void testAll() {
     testPossibilitySet1();
     testPossibilitySet2();
     testPosition1();
     testArea1();
     testBoard1();
+    testBoard2();
 }
 
 int main() {

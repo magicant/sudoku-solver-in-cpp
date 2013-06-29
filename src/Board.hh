@@ -253,6 +253,15 @@ bool operator!=(const Board<T> &b1, const Board<T> &b2)
     return !(b1 == b2);
 }
 
+extern void convert(
+        const Board<Number> &srcBoard,
+        Board<PossibilitySet> &destBoard)
+        noexcept;
+extern void convert(
+        const Board<PossibilitySet> &srcBoard,
+        Board<Number> &destBoard)
+        noexcept;
+
 extern std::ostream &operator<<(
         std::ostream &os,
         const Board<Number> &board);

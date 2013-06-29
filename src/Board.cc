@@ -43,6 +43,28 @@ Area blockArea(const Position &pos) {
     return Area(topLeft, bottomRight);
 }
 
+void convert(
+        const Board<Number> &srcBoard,
+        Board<PossibilitySet> &destBoard)
+        noexcept {
+    wholeArea.forAllPositions([&](Position pos) {
+        Number n = srcBoard[pos];
+        destBoard[pos] = (n < N) ? PossibilitySet(n) : PossibilitySet::full();
+        return true;
+    });
+}
+
+void convert(
+        const Board<PossibilitySet> &srcBoard,
+        Board<Number> &destBoard)
+        noexcept {
+    wholeArea.forAllPositions([&](Position pos) {
+        const PossibilitySet &pset = srcBoard[pos];
+        destBoard[pos] = pset.isUnique() ? pset.uniqueValue() : N;
+        return true;
+    });
+}
+
 static char separator(Position pos) {
     return pos.right().isValid() ? ' ' : '\n';
 }

@@ -288,6 +288,45 @@ static void testBoard3() {
             "5 0 0 0 0 0 0 0 0\n");
 }
 
+static void testBoard4() {
+    Board<Number> nBoard;
+    Board<PossibilitySet> pBoard;
+
+    wholeArea.forAllPositions([&](Position pos) {
+        nBoard[pos] = N;
+        return true;
+    });
+    nBoard[Position(6, 2)] = 7;
+    nBoard[Position(8, 0)] = 3;
+    convert(nBoard, pBoard);
+    wholeArea.forAllPositions([&](Position pos) {
+        if (pos == Position(6, 2))
+            test_assert(pBoard[pos].uniqueValue() == 7);
+        else if (pos == Position(8, 0))
+            test_assert(pBoard[pos].uniqueValue() == 3);
+        else
+            test_assert(pBoard[pos] == PossibilitySet::full());
+        return true;
+    });
+
+    wholeArea.forAllPositions([&](Position pos) {
+        nBoard[pos] = N + 1;
+        return true;
+    });
+    pBoard[Position(5, 3)] = PossibilitySet(4);
+    pBoard[Position(8, 0)] = PossibilitySet::full();
+    convert(pBoard, nBoard);
+    wholeArea.forAllPositions([&](Position pos) {
+        if (pos == Position(6, 2))
+            test_assert(nBoard[pos] == 7);
+        else if (pos == Position(5, 3))
+            test_assert(nBoard[pos] == 4);
+        else
+            test_assert(nBoard[pos] >= N);
+        return true;
+    });
+}
+
 static void testAll() {
     testPossibilitySet1();
     testPossibilitySet2();
@@ -296,6 +335,7 @@ static void testAll() {
     testBoard1();
     testBoard2();
     testBoard3();
+    testBoard4();
 }
 
 int main() {

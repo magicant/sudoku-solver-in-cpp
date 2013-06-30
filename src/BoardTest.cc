@@ -29,7 +29,27 @@ static void testPossibilitySet1() {
     test_assert(!pset1.isEmpty());
     test_assert(!pset1.isUnique());
 
-    test_assert(pset1.remove(n1) == pset2.add(n2));
+    pset1.remove(n1);
+    pset2.add(n2);
+    test_assert(pset1 == pset2);
+
+    const size_t n3 = 0, n4 = 3, n5 = 8, n6 = 7, n7 = 1, n8 = 4, n9 = 6;
+    pset1.add(n3);
+    test_assert(pset1.count() == 2);
+    pset1.add(n1);
+    test_assert(pset1.count() == 3);
+    pset1.add(n4);
+    test_assert(pset1.count() == 4);
+    pset1.add(n5);
+    test_assert(pset1.count() == 5);
+    pset1.add(n6);
+    test_assert(pset1.count() == 6);
+    pset1.add(n7);
+    test_assert(pset1.count() == 7);
+    pset1.add(n8);
+    test_assert(pset1.count() == 8);
+    pset1.add(n9);
+    test_assert(pset1.count() == 9);
 }
 
 static void testPossibilitySet2() {

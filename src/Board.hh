@@ -54,12 +54,16 @@ public:
         return !(*this == other);
     }
 
+    std::size_t count() const {
+        return mNumbers.count();
+    }
+
     bool isEmpty() const noexcept {
         return mNumbers.none();
     }
 
     bool isUnique() const noexcept {
-        return mNumbers.count() == 1;
+        return count() == 1;
     }
 
     Number uniqueValue() const;

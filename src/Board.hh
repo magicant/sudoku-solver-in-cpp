@@ -201,6 +201,9 @@ static inline Area columnArea(const Position &pos) {
 
 extern Area blockArea(const Position &pos);
 
+extern bool forAllBlockAreas(std::function<bool(const Area&)> f)
+        noexcept(noexcept(f(Area())));
+
 
 template <typename T>
 class Board {

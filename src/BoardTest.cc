@@ -1,3 +1,4 @@
+#include <array>
 #include <cstddef>
 #include <iostream>
 #include <sstream>
@@ -5,6 +6,7 @@
 #include "Board.hh"
 #include "Tester.inl"
 
+using std::array;
 using std::istringstream;
 using std::ostringstream;
 using std::string;
@@ -145,6 +147,28 @@ static void testArea1() {
         test_assert(6 <= pos.j() && pos.j() < 9);
         return true;
     });
+}
+
+static void testArea2() {
+    array<Area, Nsub * Nsub> blockAreas = {
+        blockArea(Position(0 * Nsub, 0 * Nsub)),
+        blockArea(Position(0 * Nsub, 1 * Nsub)),
+        blockArea(Position(0 * Nsub, 2 * Nsub)),
+        blockArea(Position(1 * Nsub, 0 * Nsub)),
+        blockArea(Position(1 * Nsub, 1 * Nsub)),
+        blockArea(Position(1 * Nsub, 2 * Nsub)),
+        blockArea(Position(2 * Nsub, 0 * Nsub)),
+        blockArea(Position(2 * Nsub, 1 * Nsub)),
+        blockArea(Position(2 * Nsub, 2 * Nsub)),
+    };
+    size_t count = 0;
+
+    test_assert(forAllBlockAreas([&](const Area& area) {
+        test_assert(area == blockAreas[count]);
+        count++;
+        return true;
+    }));
+    test_assert(count == blockAreas.size());
 }
 
 static void testBoard1() {
@@ -382,6 +406,7 @@ static void testAll() {
     testPossibilitySet3();
     testPosition1();
     testArea1();
+    testArea2();
     testBoard1();
     testBoard2();
     testBoard3();

@@ -52,6 +52,15 @@ Area blockArea(const Position &pos) {
     return Area(topLeft, bottomRight);
 }
 
+bool forAllBlockAreas(std::function<bool(const Area&)> f)
+        noexcept(noexcept(f(Area()))) {
+    for (Position pi; pi.i() < N; pi.down(Nsub))
+        for (Position pj = pi; pj.j() < N; pj.right(Nsub))
+            if (!f(blockArea(pj)))
+                return false;
+    return true;
+}
+
 void convert(
         const Board<Number> &srcBoard,
         Board<PossibilitySet> &destBoard)

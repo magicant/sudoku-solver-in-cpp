@@ -5,7 +5,6 @@
 #include "Board.hh"
 #include "Tester.inl"
 
-using std::size_t;
 using std::istringstream;
 using std::ostringstream;
 using std::string;
@@ -16,7 +15,7 @@ static void testPossibilitySet1() {
     test_assert(pset1 == pset2);
     test_assert(pset1.isEmpty());
 
-    const size_t n1 = 2;
+    const Number n1 = 2;
     pset1.add(n1);
     test_assert(pset1 == PossibilitySet(n1));
     test_assert(pset2 != PossibilitySet(n1));
@@ -24,7 +23,7 @@ static void testPossibilitySet1() {
     test_assert(pset1.uniqueValue() == n1);
     test_assert(!pset2.isUnique());
 
-    const size_t n2 = 5;
+    const Number n2 = 5;
     pset1.add(n2);
     test_assert(!pset1.isEmpty());
     test_assert(!pset1.isUnique());
@@ -33,7 +32,7 @@ static void testPossibilitySet1() {
     pset2.add(n2);
     test_assert(pset1 == pset2);
 
-    const size_t n3 = 0, n4 = 3, n5 = 8, n6 = 7, n7 = 1, n8 = 4, n9 = 6;
+    const Number n3 = 0, n4 = 3, n5 = 8, n6 = 7, n7 = 1, n8 = 4, n9 = 6;
     pset1.add(n3);
     test_assert(pset1.count() == 2);
     pset1.add(n1);
@@ -55,10 +54,10 @@ static void testPossibilitySet1() {
 static void testPossibilitySet2() {
     PossibilitySet pset;
 
-    for (size_t n = 0; n < N; n++)
+    for (Number n = 0; n < N; n++)
         pset.add(n).add(n);
     test_assert(pset == PossibilitySet::full());
-    for (size_t n = 0; n < N; n++)
+    for (Number n = 0; n < N; n++)
         pset.remove(n).remove(n);
     test_assert(pset == PossibilitySet());
 }

@@ -7,6 +7,8 @@
 
 extern void eliminateImpossibilities(Board<PossibilitySet> &board) noexcept;
 
+extern void fixUniquePossibilities(Board<PossibilitySet> &board) noexcept;
+
 
 #endif // #ifndef INCLUDED_SOLVER_HH
 

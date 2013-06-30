@@ -70,5 +70,49 @@ void fixUniquePossibilities(Board<PossibilitySet> &board) noexcept {
     });
 }
 
+static void repeatNonAssumptionProcess(Board<PossibilitySet> &board) noexcept {
+    Board<PossibilitySet> oldBoard;
+    do {
+        oldBoard = board;
+        eliminateImpossibilities(board);
+        fixUniquePossibilities(board);
+    } while (board != oldBoard);
+}
+
+static void iterateSolutionsWithAssumption(
+        const Board<PossibilitySet> &board,
+        std::function<void(const Board<Number> &solution)> resultCallback)
+        noexcept(noexcept(resultCallback(Board<Number>()))) {
+    Position pos = findPositionWithLeastPossibilities(board);
+
+    board[pos].forAllPossibleNumbers([&](Number n) {
+        Board<PossibilitySet> nextBoard = board;
+        nextBoard[pos] = PossibilitySet(n);
+        iterateSolutions(nextBoard, resultCallback);
+        return true;
+    });
+}
+
+void iterateSolutions(
+        const Board<PossibilitySet> &board,
+        std::function<void(const Board<Number> &solution)> resultCallback)
+        noexcept(noexcept(resultCallback(Board<Number>()))) {
+    Board<PossibilitySet> nextBoard = board;
+    repeatNonAssumptionProcess(nextBoard);
+
+    switch (classify(nextBoard)) {
+    case BoardState::SOLVED:
+        Board<Number> solution;
+        convert(nextBoard, solution);
+        resultCallback(solution);
+        return;
+    case BoardState::INSOLVABLE:
+        return;
+    case BoardState::UNSOLVED:
+        iterateSolutionsWithAssumption(nextBoard, resultCallback);
+        return;
+    }
+}
+
 
 /* vim: set et sw=4 sts=4 tw=79: */

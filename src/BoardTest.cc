@@ -400,6 +400,46 @@ static void testBoard4() {
     });
 }
 
+static void testBoard5() {
+    Board<PossibilitySet> board;
+    Number n1 = 3, n2 = 6;
+
+    wholeArea.forAllPositions([&](Position pos) {
+        board[pos] = PossibilitySet(n1);
+        return true;
+    });
+
+    // The "classify" function only considers the number of possible numbers in
+    // each position. The board is classified as "SOLVED" since all positions
+    // have unique possibility.
+    test_assert(classify(board) == BoardState::SOLVED);
+
+    board[Position(3, 5)].add(n2);
+    test_assert(classify(board) == BoardState::UNSOLVED);
+
+    board[Position(8, 2)].remove(n1);
+    test_assert(classify(board) == BoardState::INSOLVABLE);
+}
+
+static void testBoard6() {
+    Board<PossibilitySet> board;
+    wholeArea.forAllPositions([&](Position pos) {
+        board[pos] = PossibilitySet::full();
+        return true;
+    });
+
+    Position pos1(7, 2), pos2(5, 5), pos3(6, 1);
+
+    board[pos1].remove(2);
+    test_assert(findPositionWithLeastPossibilities(board) == pos1);
+    board[pos2].remove(1).remove(6);
+    test_assert(findPositionWithLeastPossibilities(board) == pos2);
+    board[pos3].remove(8).remove(1).remove(4);
+    test_assert(findPositionWithLeastPossibilities(board) == pos3);
+    board[pos2] = PossibilitySet(3);
+    test_assert(findPositionWithLeastPossibilities(board) == pos3);
+}
+
 static void testAll() {
     testPossibilitySet1();
     testPossibilitySet2();
@@ -411,6 +451,8 @@ static void testAll() {
     testBoard2();
     testBoard3();
     testBoard4();
+    testBoard5();
+    testBoard6();
 }
 
 int main() {

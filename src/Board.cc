@@ -7,6 +7,7 @@
 using std::abort;
 using std::logic_error;
 using std::numeric_limits;
+using std::size_t;
 using std::streamsize;
 
 
@@ -121,6 +122,44 @@ std::istream &operator>>(std::istream &is, Board<Number> &board) {
         is.ignore(numeric_limits<streamsize>::max(), '\n');
     }
     return is;
+}
+
+/**
+ * Computes the state of the given board. Only considers the number of possible
+ * numbers in every position.
+ */
+BoardState classify(const Board<PossibilitySet> &board) noexcept {
+    BoardState state = BoardState::SOLVED;
+
+    wholeArea.forAllPositions([&](Position pos) {
+        const PossibilitySet &pset = board[pos];
+        if (pset.isEmpty()) {
+            state = BoardState::INSOLVABLE;
+            return false;
+        }
+        if (!pset.isUnique())
+            state = BoardState::UNSOLVED;
+        return true;
+    });
+
+    return state;
+}
+
+Position findPositionWithLeastPossibilities(
+        const Board<PossibilitySet> &board) noexcept {
+    Position positionWithLeastPossibilities;
+    size_t leastCount = N + 1;
+
+    wholeArea.forAllPositions([&](Position pos) {
+        size_t count = board[pos].count();
+        if (1 < count && count < leastCount) {
+            leastCount = count;
+            positionWithLeastPossibilities = pos;
+        }
+        return true;
+    });
+
+    return positionWithLeastPossibilities;
 }
 
 

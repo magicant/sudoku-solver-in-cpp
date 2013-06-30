@@ -281,6 +281,15 @@ extern std::ostream &operator<<(
 
 extern std::istream &operator>>(std::istream &is, Board<Number> &board);
 
+enum class BoardState {
+    INSOLVABLE, SOLVED, UNSOLVED,
+};
+
+extern BoardState classify(const Board<PossibilitySet> &board) noexcept;
+
+extern Position findPositionWithLeastPossibilities(
+        const Board<PossibilitySet> &board) noexcept;
+
 
 #endif // #ifndef INCLUDED_BOARD_HH
 

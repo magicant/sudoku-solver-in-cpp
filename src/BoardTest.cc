@@ -63,6 +63,36 @@ static void testPossibilitySet2() {
     test_assert(pset == PossibilitySet());
 }
 
+static void testPossibilitySetNumbers(
+        const PossibilitySet &pset,
+        const string expected) {
+    ostringstream os;
+    pset.forAllPossibleNumbers([&](Number n) -> bool { return os << n; });
+    test_assert(os.str() == expected);
+}
+
+static void testPossibilitySet3() {
+    PossibilitySet pset;
+    testPossibilitySetNumbers(pset, "");
+    pset.add(7);
+    pset.add(3);
+    pset.add(6);
+    testPossibilitySetNumbers(pset, "367");
+    pset.remove(3);
+    pset.add(1);
+    testPossibilitySetNumbers(pset, "167");
+
+    pset = PossibilitySet::full();
+    testPossibilitySetNumbers(pset, "012345678");
+    pset.remove(4);
+    pset.remove(8);
+    pset.remove(1);
+    testPossibilitySetNumbers(pset, "023567");
+    pset.add(8);
+    pset.remove(5);
+    testPossibilitySetNumbers(pset, "023678");
+}
+
 static void testPosition1() {
     test_assert(Position().i() == 0);
     test_assert(Position().j() == 0);
@@ -350,6 +380,7 @@ static void testBoard4() {
 static void testAll() {
     testPossibilitySet1();
     testPossibilitySet2();
+    testPossibilitySet3();
     testPosition1();
     testArea1();
     testBoard1();

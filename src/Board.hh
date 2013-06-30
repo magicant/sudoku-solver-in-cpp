@@ -78,6 +78,9 @@ public:
         return *this;
     }
 
+    bool forAllPossibleNumbers(std::function<bool(Number)> f)
+            const noexcept(noexcept(f(0)));
+
 };
 
 

@@ -21,6 +21,15 @@ Number PossibilitySet::uniqueValue() const {
     abort();
 }
 
+bool PossibilitySet::forAllPossibleNumbers(std::function<bool(Number)> f)
+        const noexcept(noexcept(f(0))) {
+    for (Number n = 0; n < N; n++)
+        if (mNumbers[n])
+            if (!f(n))
+                return false;
+    return true;
+}
+
 bool Area::contains(const Position &pos) const noexcept {
     return topLeft().i() <= pos.i() &&
             topLeft().j() <= pos.j() &&

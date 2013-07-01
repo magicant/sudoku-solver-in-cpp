@@ -94,24 +94,31 @@ static void iterateSolutionsWithAssumption(
 }
 
 void iterateSolutions(
-        const Board<PossibilitySet> &board,
+        Board<PossibilitySet> &board,
         std::function<void(const Board<Number> &solution)> resultCallback)
         noexcept(noexcept(resultCallback(Board<Number>()))) {
-    Board<PossibilitySet> nextBoard = board;
-    repeatNonAssumptionProcess(nextBoard);
+    repeatNonAssumptionProcess(board);
 
-    switch (classify(nextBoard)) {
+    switch (classify(board)) {
     case BoardState::SOLVED:
         Board<Number> solution;
-        convert(nextBoard, solution);
+        convert(board, solution);
         resultCallback(solution);
         return;
     case BoardState::INSOLVABLE:
         return;
     case BoardState::UNSOLVED:
-        iterateSolutionsWithAssumption(nextBoard, resultCallback);
+        iterateSolutionsWithAssumption(board, resultCallback);
         return;
     }
+}
+
+void iterateSolutions(
+        const Board<PossibilitySet> &board,
+        std::function<void(const Board<Number> &solution)> resultCallback)
+        noexcept(noexcept(resultCallback(Board<Number>()))) {
+    Board<PossibilitySet> copyBoard(board);
+    iterateSolutions(copyBoard, resultCallback);
 }
 
 

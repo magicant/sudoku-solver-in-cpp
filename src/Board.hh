@@ -252,7 +252,7 @@ public:
 template <typename T>
 bool operator==(const Board<T> &b1, const Board<T> &b2)
         noexcept(noexcept(b1[Position()] == b2[Position()])) {
-    return wholeArea.forAllPositions([&](Position pos) {
+    return wholeArea.forAllPositions([&](Position pos) -> bool {
         return b1[pos] == b2[pos];
     });
 }

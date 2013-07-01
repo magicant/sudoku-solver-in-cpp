@@ -8,15 +8,15 @@ using std::array;
 void eliminateImpossibilities(Board<PossibilitySet> &board) noexcept {
     // Collect unique values for speed.
     Board<Number> uniqueValues;
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         const PossibilitySet &pset = board[pos];
         uniqueValues[pos] = pset.isUnique() ? pset.uniqueValue() : N;
         return true;
     });
 
     // Eliminate!
-    wholeArea.forAllPositions([&](Position pos1) {
-        auto eliminate = [&](Position pos2) {
+    wholeArea.forAllPositions([&](Position pos1) -> bool {
+        auto eliminate = [&](Position pos2) -> bool {
             if (pos2 != pos1 && uniqueValues[pos2] < N)
                 board[pos1].remove(uniqueValues[pos2]);
             return true;
@@ -44,7 +44,7 @@ static void fixUniquePossibilities(
 
     array<Possibility, N> possibilities;
 
-    area.forAllPositions([&](Position pos) {
+    area.forAllPositions([&](Position pos) -> bool {
         board[pos].forAllPossibleNumbers([&, pos](Number n) {
             possibilities[n].position = pos;
             possibilities[n].count++;
@@ -64,7 +64,7 @@ void fixUniquePossibilities(Board<PossibilitySet> &board) noexcept {
         fixUniquePossibilities(board, columnArea(n));
     }
 
-    forAllBlockAreas([&](const Area &area) {
+    forAllBlockAreas([&](const Area &area) -> bool {
         fixUniquePossibilities(board, area);
         return true;
     });
@@ -85,7 +85,7 @@ static void iterateSolutionsWithAssumption(
         noexcept(noexcept(resultCallback(Board<Number>()))) {
     Position pos = findPositionWithLeastPossibilities(board);
 
-    board[pos].forAllPossibleNumbers([&](Number n) {
+    board[pos].forAllPossibleNumbers([&](Number n) -> bool {
         Board<PossibilitySet> nextBoard = board;
         nextBoard[pos] = PossibilitySet(n);
         iterateSolutions(nextBoard, resultCallback);

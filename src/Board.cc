@@ -66,7 +66,7 @@ void convert(
         const Board<Number> &srcBoard,
         Board<PossibilitySet> &destBoard)
         noexcept {
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         Number n = srcBoard[pos];
         destBoard[pos] = (n < N) ? PossibilitySet(n) : PossibilitySet::full();
         return true;
@@ -77,7 +77,7 @@ void convert(
         const Board<PossibilitySet> &srcBoard,
         Board<Number> &destBoard)
         noexcept {
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         const PossibilitySet &pset = srcBoard[pos];
         destBoard[pos] = pset.isUnique() ? pset.uniqueValue() : N;
         return true;
@@ -131,7 +131,7 @@ std::istream &operator>>(std::istream &is, Board<Number> &board) {
 BoardState classify(const Board<PossibilitySet> &board) noexcept {
     BoardState state = BoardState::SOLVED;
 
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         const PossibilitySet &pset = board[pos];
         if (pset.isEmpty()) {
             state = BoardState::INSOLVABLE;
@@ -150,7 +150,7 @@ Position findPositionWithLeastPossibilities(
     Position positionWithLeastPossibilities;
     size_t leastCount = N + 1;
 
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         size_t count = board[pos].count();
         if (1 < count && count < leastCount) {
             leastCount = count;

@@ -3,7 +3,7 @@
 
 
 static void setUnique(Board<PossibilitySet> &board, Position pos, Number n) {
-    auto eliminate = [&](Position pos2) {
+    auto eliminate = [&](Position pos2) -> bool {
         board[pos2].remove(n);
         return true;
     };
@@ -19,7 +19,7 @@ static void testEliminateImpossibilities() {
     Position pos1(0, 0), pos2(8, 0), pos3(3, 7);
     Number n1 = 0, n2 = 3, n3 = 8;
 
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         actualBoard[pos] = expectedBoard[pos] = PossibilitySet::full();
         return true;
     });
@@ -38,7 +38,7 @@ static void testEliminateImpossibilities() {
 
 static void testApplyUniquePossibilities() {
     Board<PossibilitySet> actualBoard, expectedBoard;
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         actualBoard[pos] = PossibilitySet::full();
         return true;
     });
@@ -50,27 +50,27 @@ static void testApplyUniquePossibilities() {
     Position pos1(0, 0), pos2(3, 4), pos3(3, 7), pos4(2, 1), pos5(6, 5);
     Number n1 = 0, n2 = 2, n3 = 8, n4 = 5, n5 = n1;
 
-    rowArea(pos1).forAllPositions([&](Position pos) {
+    rowArea(pos1).forAllPositions([&](Position pos) -> bool {
         actualBoard[pos].remove(n1);
         return true;
     });
     actualBoard[pos1].add(n1);
-    rowArea(pos2).forAllPositions([&](Position pos) {
+    rowArea(pos2).forAllPositions([&](Position pos) -> bool {
         actualBoard[pos].remove(n2);
         return true;
     });
     actualBoard[pos2].add(n2);
-    columnArea(pos3).forAllPositions([&](Position pos) {
+    columnArea(pos3).forAllPositions([&](Position pos) -> bool {
         actualBoard[pos].remove(n3);
         return true;
     });
     actualBoard[pos3].add(n3);
-    blockArea(pos4).forAllPositions([&](Position pos) {
+    blockArea(pos4).forAllPositions([&](Position pos) -> bool {
         actualBoard[pos].remove(n4);
         return true;
     });
     actualBoard[pos4].add(n4);
-    blockArea(pos5).forAllPositions([&](Position pos) {
+    blockArea(pos5).forAllPositions([&](Position pos) -> bool {
         actualBoard[pos].remove(n5);
         return true;
     });

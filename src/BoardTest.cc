@@ -116,33 +116,33 @@ static void testPosition1() {
 
 static void testArea1() {
     const Area a1(Position(1, 2), Position(2, 3));
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         test_assert(a1.contains(pos) == (pos == a1.topLeft()));
         return true;
     });
-    a1.forAllPositions([&](Position pos) {
+    a1.forAllPositions([&](Position pos) -> bool {
         test_assert(pos == a1.topLeft());
         return true;
     });
 
     const Position p1(3, 4);
     const Area a2 = rowArea(p1), a3 = columnArea(p1);
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         test_assert(a2.contains(pos) == (pos.i() == a2.topLeft().i()));
         test_assert(a3.contains(pos) == (pos.j() == a3.topLeft().j()));
         return true;
     });
-    a2.forAllPositions([&](Position pos) {
+    a2.forAllPositions([&](Position pos) -> bool {
         test_assert(pos.i() == a2.topLeft().i());
         return true;
     });
-    a3.forAllPositions([&](Position pos) {
+    a3.forAllPositions([&](Position pos) -> bool {
         test_assert(pos.j() == a3.topLeft().j());
         return true;
     });
 
     const Area a4 = blockArea(Position(4, 7));
-    a4.forAllPositions([&](Position pos) {
+    a4.forAllPositions([&](Position pos) -> bool {
         test_assert(3 <= pos.i() && pos.i() < 6);
         test_assert(6 <= pos.j() && pos.j() < 9);
         return true;
@@ -163,7 +163,7 @@ static void testArea2() {
     };
     size_t count = 0;
 
-    test_assert(forAllBlockAreas([&](const Area& area) {
+    test_assert(forAllBlockAreas([&](const Area& area) -> bool {
         test_assert(area == blockAreas[count]);
         count++;
         return true;
@@ -181,7 +181,7 @@ static void testBoard1() {
 
     Board<Int> b1;
 
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         test_assert(b1.at(pos) == 0);
         test_assert(b1[pos] == 0);
         return true;
@@ -192,21 +192,21 @@ static void testBoard1() {
     test_assert(b1 == b2);
     test_assert(b2 == b1);
 
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         b1[pos] += pos.i();
         return true;
     });
     test_assert(b1 == b1);
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         test_assert(b1[pos] == pos.i());
         return true;
     });
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         b1[pos] += pos.j();
         return true;
     });
     test_assert(b1 == b1);
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         test_assert(b1[pos] == pos.i() + pos.j());
         return true;
     });
@@ -231,7 +231,7 @@ static void testParseAndOutput(const string input, const string output) {
 
 static void testBoard2() {
     Board<Number> b1;
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         b1[pos] = 0;
         return true;
     });
@@ -261,7 +261,7 @@ static void testBoard2() {
                 "1 1 1 1 1 1 1 1 1\n"
                 );
 
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         b1[pos] = pos.i() * pos.j();
         return true;
     });
@@ -365,14 +365,14 @@ static void testBoard4() {
     Board<Number> nBoard;
     Board<PossibilitySet> pBoard;
 
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         nBoard[pos] = N;
         return true;
     });
     nBoard[Position(6, 2)] = 7;
     nBoard[Position(8, 0)] = 3;
     convert(nBoard, pBoard);
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         if (pos == Position(6, 2))
             test_assert(pBoard[pos].uniqueValue() == 7);
         else if (pos == Position(8, 0))
@@ -382,14 +382,14 @@ static void testBoard4() {
         return true;
     });
 
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         nBoard[pos] = N + 1;
         return true;
     });
     pBoard[Position(5, 3)] = PossibilitySet(4);
     pBoard[Position(8, 0)] = PossibilitySet::full();
     convert(pBoard, nBoard);
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         if (pos == Position(6, 2))
             test_assert(nBoard[pos] == 7);
         else if (pos == Position(5, 3))
@@ -404,7 +404,7 @@ static void testBoard5() {
     Board<PossibilitySet> board;
     Number n1 = 3, n2 = 6;
 
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         board[pos] = PossibilitySet(n1);
         return true;
     });
@@ -423,7 +423,7 @@ static void testBoard5() {
 
 static void testBoard6() {
     Board<PossibilitySet> board;
-    wholeArea.forAllPositions([&](Position pos) {
+    wholeArea.forAllPositions([&](Position pos) -> bool {
         board[pos] = PossibilitySet::full();
         return true;
     });

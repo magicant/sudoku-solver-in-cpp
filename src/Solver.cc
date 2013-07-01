@@ -6,19 +6,14 @@ using std::array;
 
 
 void eliminateImpossibilities(Board<PossibilitySet> &board) noexcept {
-    // Collect unique values for speed.
-    Board<Number> uniqueValues;
-    wholeArea.forAllPositions([&](Position pos) -> bool {
-        const PossibilitySet &pset = board[pos];
-        uniqueValues[pos] = pset.isUnique() ? pset.uniqueValue() : N;
-        return true;
-    });
+    wholeArea.forAllPositions([&board](Position pos1) -> bool {
+        if (!board[pos1].isUnique())
+            return true;
 
-    // Eliminate!
-    wholeArea.forAllPositions([&](Position pos1) -> bool {
-        auto eliminate = [&](Position pos2) -> bool {
-            if (pos2 != pos1 && uniqueValues[pos2] < N)
-                board[pos1].remove(uniqueValues[pos2]);
+        Number n = board[pos1].uniqueValue();
+        auto eliminate = [&board, pos1, n](Position pos2) -> bool {
+            if (pos2 != pos1)
+                board[pos2].remove(n);
             return true;
         };
 

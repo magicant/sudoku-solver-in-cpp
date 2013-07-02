@@ -6,6 +6,7 @@
 /depcomp
 /install-sh
 /missing
+/test-driver
 
 /config.h
 /config.h.in
@@ -17,6 +18,8 @@ Makefile.in
 .deps/
 *.o
 *Test
+*.log
+*.trs
 TAGS
 tags
 cscope.*

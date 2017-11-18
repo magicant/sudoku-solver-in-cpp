@@ -91,7 +91,8 @@ static char separator(Position pos) {
 std::ostream &operator<<(std::ostream &os, const Board<Number> &board) {
     wholeArea.forAllPositions([&](Position pos) -> bool {
         Number n = board[pos];
-        return os << (n < N ? n + 1 : 0) << separator(pos);
+        os << (n < N ? n + 1 : 0) << separator(pos);
+        return os.good();
     });
     return os;
 }
@@ -107,7 +108,8 @@ std::ostream &operator<<(
             os << pset.uniqueValue() + 1;
         else
             os << '?';
-        return os << separator(pos);
+        os << separator(pos);
+        return os.good();
     });
     return os;
 }
